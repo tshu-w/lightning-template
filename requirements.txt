@@ -1,0 +1,8 @@
+torch >= 1.10.0
+torchvision >= 0.11.0
+pytorch-lightning >= 1.5.0
+jsonargparse[signatures,jsonnet] >= 4.3.0
+shtab >= 1.5.0
+rich >= 11.0.0
+
+jupyterlab

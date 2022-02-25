@@ -1,0 +1,7 @@
+seed_everything: 42
+trainer:
+  logger:
+    class_path: pytorch_lightning.loggers.TensorBoardLogger
+    init_args:
+      save_dir: "results"
+  gpus: 1

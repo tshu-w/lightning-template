@@ -1,0 +1,5 @@
+trainer:
+  gpus: 0
+  max_epochs: 1
+  detect_anomaly: true
+  enable_checkpointing: false
