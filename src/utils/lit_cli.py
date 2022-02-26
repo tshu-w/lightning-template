@@ -16,6 +16,13 @@ class LitCLI(LightningCLI):
     def add_arguments_to_parser(self, parser: LightningArgumentParser) -> None:
         parser.add_argument("-n", "--name", default="none", help="Experiment name")
 
+        for arg in ["num_labels", "task_name"]:
+            parser.link_arguments(
+                f"data.init_args.{arg}",
+                f"model.init_args.{arg}",
+                apply_on="instantiate",
+            )
+
     def before_instantiate_classes(self) -> None:
         trainer_config = self.config[self.subcommand]["trainer"]
         if trainer_config["enable_checkpointing"]:

@@ -5,4 +5,10 @@ jsonargparse[signatures,jsonnet] >= 4.3.0
 shtab >= 1.5.0
 rich >= 11.0.0
 
+transformers >= 4.16.0
+datasets >= 1.18.0
+# for GLUE datasets
+scipy
+sklearn
+
 jupyterlab
