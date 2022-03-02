@@ -1,0 +1,16 @@
+description: lightning-template
+
+environment:
+  image: docker.cipsup.cn/wangtianshu/lightning-template
+  # force_pull_image: true
+
+bind_mounts:
+  - host_path: /shared_home/wangtianshu/data
+    container_path: /run/determined/workdir/data
+  - host_path: /shared_home/wangtianshu/models
+    container_path: /run/determined/workdir/models
+  - host_path: /shared_home/wangtianshu/results
+    container_path: /run/determined/workdir/results
+
+resources:
+  slots: 1
