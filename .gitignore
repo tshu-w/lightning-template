@@ -136,3 +136,5 @@ dmypy.json
 !/models/.gitkeep
 /results/*
 !/results/.gitkeep
+
+!.dir-locals.el
