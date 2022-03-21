@@ -17,3 +17,4 @@ all = true
 [tool.pyright]
 venv = "template"
 typeCheckingMode = "off"
+useLibraryCodeForTypes = true
