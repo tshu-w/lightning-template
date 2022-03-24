@@ -3,4 +3,4 @@ trainer:
   profiler: "simple"
   # profiler: "advanced"
   # profiler: "pytorch"
-  enable_checkpointing: false
+debug: true
