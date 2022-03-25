@@ -33,21 +33,17 @@ class LitCLI(LightningCLI):
 
     def before_instantiate_classes(self) -> None:
         trainer_config = self.config[self.subcommand]["trainer"]
-        if trainer_config["enable_checkpointing"]:
-            mode = "debug" if self.config[self.subcommand]["debug"] else self.subcommand
-            name = self.config[self.subcommand]["name"]
-            timestamp = datetime.now().strftime("%m-%dT%H%M%S")
-            default_root_dir = os.path.join("results", mode, name, timestamp)
-            trainer_config["default_root_dir"] = default_root_dir
+        mode = "debug" if self.config[self.subcommand]["debug"] else self.subcommand
+        name = self.config[self.subcommand]["name"]
+        timestamp = datetime.now().strftime("%m-%dT%H%M%S")
+        default_root_dir = os.path.join("results", mode, name, timestamp)
+        trainer_config["default_root_dir"] = default_root_dir
 
-            assert isinstance(trainer_config["logger"], dict)
-            logger_init_args = trainer_config["logger"]["init_args"]
-            logger_init_args["save_dir"] = os.path.join("results", mode)
-            logger_init_args["name"] = name
-            logger_init_args["version"] = timestamp
-        else:  # debugging
-            self.save_config_callback = None
-            trainer_config["logger"] = False
+        assert isinstance(trainer_config["logger"], dict)
+        logger_init_args = trainer_config["logger"]["init_args"]
+        logger_init_args["save_dir"] = os.path.join("results", mode)
+        logger_init_args["name"] = name
+        logger_init_args["version"] = timestamp
 
     def after_run(self):
         results = {}
