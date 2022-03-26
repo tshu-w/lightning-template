@@ -36,8 +36,8 @@ git clone https://github.com/YourGithubName/your-repository-name
 cd your-repository-name
 
 # [OPTIONAL] create conda environment
-conda create -n template python=3.9
-conda activate template
+conda create -n env python=3.9
+conda activate env
 
 # install requirements
 pip install -r requirements.txt
