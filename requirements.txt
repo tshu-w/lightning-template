@@ -2,7 +2,7 @@
 torch >= 1.11.0
 torchvision >= 0.12.0
 pytorch-lightning >= 1.5.0
-jsonargparse[signatures,jsonnet] >= 4.3.0
+jsonargparse[signatures,jsonnet] >= 4.5.0
 shtab >= 1.5.0
 rich >= 12.0.0
 
