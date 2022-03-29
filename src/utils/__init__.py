@@ -1,2 +1,2 @@
-from . import jsonargparse, shtab
+from . import shtab
 from .lit_cli import LitCLI
