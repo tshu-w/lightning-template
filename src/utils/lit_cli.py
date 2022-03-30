@@ -39,7 +39,7 @@ class LitCLI(LightningCLI):
         default_root_dir = os.path.join("results", mode, name, timestamp)
         trainer_config["default_root_dir"] = default_root_dir
 
-        assert isinstance(trainer_config["logger"], dict)
+        assert isinstance(trainer_config["logger"], argparse.Namespace)
         logger_init_args = trainer_config["logger"]["init_args"]
         logger_init_args["save_dir"] = os.path.join("results", mode)
         logger_init_args["name"] = name
