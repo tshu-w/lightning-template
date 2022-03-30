@@ -44,6 +44,9 @@ class LitCLI(LightningCLI):
         logger_init_args["save_dir"] = os.path.join("results", mode)
         logger_init_args["name"] = name
         logger_init_args["version"] = timestamp
+        # TEMP: https://github.com/PyTorchLightning/pytorch-lightning/issues/12464
+        delattr(logger_init_args, "agg_key_funcs")
+        delattr(logger_init_args, "agg_default_func")
 
     def after_run(self):
         results = {}
