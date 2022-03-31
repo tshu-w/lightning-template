@@ -10,7 +10,7 @@ from typing import Any
 import shtab
 from pytorch_lightning.trainer.states import TrainerFn
 from pytorch_lightning.utilities.cli import LightningArgumentParser, LightningCLI
-from rich import print
+from pytorch_lightning.utilities.metrics import metrics_to_scalars
 
 
 class LitCLI(LightningCLI):
@@ -70,7 +70,6 @@ class LitCLI(LightningCLI):
                     "model": self.model,
                     "datamodule": self.datamodule,
                     "ckpt_path": ckpt_path,
-                    "verbose": False,
                 }
                 has_val_loader = (
                     self.trainer._data_connector._val_dataloader_source.is_defined()
@@ -86,11 +85,10 @@ class LitCLI(LightningCLI):
 
                 results = dict(ChainMap(*val_results, *test_results))
         else:
-            results = self.trainer.logged_metrics
+            results = metrics_to_scalars(self.trainer.logged_metrics)
 
         if results:
             results_str = json.dumps(results, ensure_ascii=False, indent=2)
-            print(results_str)
 
             metrics_file = Path(self.trainer.log_dir) / "metrics.json"
             with metrics_file.open("w") as f:
