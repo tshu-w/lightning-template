@@ -9,6 +9,7 @@ from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
     PreTrainedTokenizer,
+    get_linear_schedule_with_warmup,
 )
 
 
@@ -20,6 +21,9 @@ class GLUETransformer(LightningModule):
         num_labels: int,
         max_length: Optional[int] = None,
         learning_rate: float = 2e-5,
+        adam_epsilon: float = 1e-8,
+        warmup_steps: int = 0,
+        weight_decay: float = 0.0,
     ):
         super().__init__()
         self.save_hyperparameters()
@@ -109,9 +113,39 @@ class GLUETransformer(LightningModule):
         return self.common_epoch_end(outputs, "test")
 
     def configure_optimizers(self):
-        return torch.optim.AdamW(
-            params=self.parameters(), lr=self.hparams.learning_rate
+        no_decay = ["bias", "LayerNorm.weight"]
+        optimizer_grouped_parameters = [
+            {
+                "params": [
+                    p
+                    for n, p in self.model.named_parameters()
+                    if not any(nd in n for nd in no_decay)
+                ],
+                "weight_decay": self.hparams.weight_decay,
+            },
+            {
+                "params": [
+                    p
+                    for n, p in self.model.named_parameters()
+                    if any(nd in n for nd in no_decay)
+                ],
+                "weight_decay": 0.0,
+            },
+        ]
+        optimizer = torch.optim.AdamW(
+            optimizer_grouped_parameters,
+            lr=self.hparams.learning_rate,
+            eps=self.hparams.adam_epsilon,
         )
+
+        scheduler = get_linear_schedule_with_warmup(
+            optimizer,
+            num_warmup_steps=self.hparams.warmup_steps,
+            num_training_steps=self.trainer.estimated_stepping_batches,
+        )
+        scheduler = {"scheduler": scheduler, "interval": "step", "frequency": 1}
+
+        return [optimizer], [scheduler]
 
     @staticmethod
     def _convert_to_features(
