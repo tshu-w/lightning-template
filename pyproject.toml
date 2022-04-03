@@ -15,6 +15,7 @@ all = true
 
 # https://github.com/microsoft/pyright
 [tool.pyright]
+include = ["src"]
 venv = "template"
 typeCheckingMode = "off"
 useLibraryCodeForTypes = true
