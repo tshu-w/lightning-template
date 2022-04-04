@@ -5,7 +5,7 @@ import os
 from collections import ChainMap, defaultdict
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 import shtab
 from pytorch_lightning.trainer.states import TrainerFn
@@ -32,23 +32,29 @@ class LitCLI(LightningCLI):
             )
 
     def before_instantiate_classes(self) -> None:
-        trainer_config = self.config[self.subcommand]["trainer"]
-        mode = "debug" if self.config[self.subcommand]["debug"] else self.subcommand
-        name = self.config[self.subcommand]["name"]
+        config = self.config[self.subcommand]
+        mode = "debug" if config.debug else self.subcommand
         timestamp = datetime.now().strftime("%m-%dT%H%M%S")
-        default_root_dir = os.path.join("results", mode, name, timestamp)
-        trainer_config["default_root_dir"] = default_root_dir
 
-        assert isinstance(trainer_config["logger"], argparse.Namespace)
-        logger_init_args = trainer_config["logger"]["init_args"]
-        logger_init_args["save_dir"] = os.path.join("results", mode)
-        logger_init_args["name"] = name
-        logger_init_args["version"] = timestamp
-        # TEMP: https://github.com/PyTorchLightning/pytorch-lightning/issues/12464
-        delattr(logger_init_args, "agg_key_funcs")
-        delattr(logger_init_args, "agg_default_func")
+        config.trainer.default_root_dir = os.path.join(
+            "results", mode, config.name, timestamp
+        )
 
-    def after_run(self):
+        if mode == "debug":
+            config.trainer.logger = None
+
+        logger = config.trainer.logger
+        assert logger != True, "should assign trainer.logger with the specific logger."
+        if logger:
+            loggers = logger if isinstance(logger, Iterable) else [logger]
+            for logger in loggers:
+                logger.init_args.save_dir = os.path.join(
+                    logger.init_args.get("save_dir", "results"), self.subcommand
+                )
+                logger.init_args.name = config.name
+                logger.init_args.version = timestamp
+
+    def after_run(self) -> None:
         results = {}
 
         if self.trainer.state.fn == TrainerFn.FITTING:
