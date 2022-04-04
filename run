@@ -3,15 +3,12 @@
 import argparse
 import os
 
-from pytorch_lightning import LightningDataModule, LightningModule
 from pytorch_lightning.utilities.cli import (
     DATAMODULE_REGISTRY,
     MODEL_REGISTRY,
     _populate_registries,
 )
 
-import src.datamodules
-import src.models
 from src.utils import LitCLI
 
 
