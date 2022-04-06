@@ -12,4 +12,5 @@ datasets >= 2.0.0
 scipy
 sklearn
 
+wandb
 jupyterlab
