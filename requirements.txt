@@ -10,7 +10,7 @@ transformers >= 4.16.0
 datasets >= 2.0.0
 # for GLUE datasets
 scipy
-sklearn
+scikit-learn
 
 wandb
 jupyterlab
