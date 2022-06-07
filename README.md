@@ -8,21 +8,13 @@ A clean and scalable template to structure ML paper-code the same so that work c
 
 <div align="center">
 
-# Your Project Name
+<h2 id="your-project-name">Your Project Name</h2>
 
-[![Paper](http://img.shields.io/badge/paper-arxiv.1001.2234-B31B1B.svg)](https://www.nature.com/articles/nature14539)
-[![Conference](http://img.shields.io/badge/NeurIPS-2019-4b44ce.svg)](https://papers.nips.cc/book/advances-in-neural-information-processing-systems-31-2018)
-[![Conference](http://img.shields.io/badge/ICLR-2019-4b44ce.svg)](https://papers.nips.cc/book/advances-in-neural-information-processing-systems-31-2018)
-[![Conference](http://img.shields.io/badge/AnyConference-year-4b44ce.svg)](https://papers.nips.cc/book/advances-in-neural-information-processing-systems-31-2018)
-<!--
-ARXIV
-[![Paper](http://img.shields.io/badge/arxiv-math.co:1480.1111-B31B1B.svg)](https://www.nature.com/articles/nature14539)
--->
+<p>
+<a href="https://arxiv.org/abs/1706.03762"><img src="http://img.shields.io/badge/arxiv-1706.03762-B31B1B.svg" alt="Arxiv" /></a>
+<a href="https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf"><img src="http://img.shields.io/badge/NeurIPS-2017-4b44ce.svg" alt="Conference" /></a>
+</p>
 
-
-<!--
-Conference
--->
 </div>
 
 ## Description
@@ -30,21 +22,26 @@ What it does
 
 ## How to run
 First, install dependencies
-```bash
+```console
 # clone project
 git clone https://github.com/YourGithubName/your-repository-name
 cd your-repository-name
 
-# [OPTIONAL] create conda environment
-conda create -n env python=3.9
-conda activate env
+# [SUGGESTED] use conda environment
+conda env create -n template -f environment.yaml
+conda activate template
 
-# install requirements
+# [ALTERNATIVE] install requirements directly
 pip install -r requirements.txt
 ```
 
-Next, run experiments with the `run` script.
-```bash
+Next, to obtain the main results of the paper:
+```console
+# commands to get the main results
+```
+
+You can also run experiments with the `run` script.
+```console
 # fit with the demo config
 ./run fit --config configs/demo.yaml
 # or specific command line arguments
