@@ -18,18 +18,12 @@ from pytorch_lightning.loggers.neptune import (
 if _NEPTUNE_AVAILABLE and _NEPTUNE_GREATER_EQUAL_0_9:
     try:
         from neptune import new as neptune
-        from neptune.new.exceptions import (
-            NeptuneLegacyProjectException,
-            NeptuneOfflineModeFetchException,
-        )
+        from neptune.new.exceptions import NeptuneLegacyProjectException
         from neptune.new.run import Run
         from neptune.new.types import File as NeptuneFile
     except ModuleNotFoundError:
         import neptune
-        from neptune.exceptions import (
-            NeptuneLegacyProjectException,
-            NeptuneOfflineModeFetchException,
-        )
+        from neptune.exceptions import NeptuneLegacyProjectException
         from neptune.run import Run
         from neptune.types import File as NeptuneFile
 else:
