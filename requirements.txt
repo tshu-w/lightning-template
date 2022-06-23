@@ -1,10 +1,8 @@
 --find-links https://download.pytorch.org/whl/cu113/torch_stable.html
 torch >= 1.11.0
 torchvision >= 0.12.0
-pytorch-lightning >= 1.6.0
-jsonargparse[signatures,jsonnet] >= 4.5.0
+pytorch-lightning[extra] >= 1.6.0
 shtab >= 1.5.4
-rich >= 12.0.0
 
 transformers >= 4.16.0
 datasets >= 2.0.0
