@@ -1,6 +1,7 @@
 FROM nvidia/cuda:11.3.1-cudnn8-devel-ubuntu20.04
 
 ARG CONDA_ENV=env
+ARG PYTHON_VERSION=3.9
 
 SHELL ["/bin/bash", "-c"]
 
@@ -21,7 +22,7 @@ RUN curl -o miniconda3.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-
   /bin/bash miniconda3.sh -b -p /opt/conda && \
   rm miniconda3.sh && \
   conda update -n base -c defaults conda && \
-  conda create -n ${CONDA_ENV} && \
+  conda create -n ${CONDA_ENV} python=${PYTHON_VERSION} && \
   conda clean -ay && \
   echo "source activate ${CONDA_ENV}" >> ~/.bashrc
 
