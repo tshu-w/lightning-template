@@ -1,5 +1,5 @@
 trainer:
-  gpus: 0
+  accelerator: "cpu"
   max_epochs: 1
   detect_anomaly: true
 debug: true

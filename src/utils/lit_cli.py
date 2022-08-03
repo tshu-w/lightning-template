@@ -8,8 +8,8 @@ from pathlib import Path
 from typing import Any, Iterable
 
 import shtab
+from pytorch_lightning.cli import LightningArgumentParser, LightningCLI
 from pytorch_lightning.trainer.states import TrainerFn
-from pytorch_lightning.utilities.cli import LightningArgumentParser, LightningCLI
 from pytorch_lightning.utilities.metrics import metrics_to_scalars
 
 

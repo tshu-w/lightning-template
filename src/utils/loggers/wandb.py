@@ -1,12 +1,11 @@
 from typing import Optional, Union
 
-import pytorch_lightning
 from pytorch_lightning.loggers import wandb as wandb_logger
-from pytorch_lightning.utilities.exceptions import MisconfigurationException
-from pytorch_lightning.utilities.imports import (
+from pytorch_lightning.loggers.wandb import (
     _WANDB_GREATER_EQUAL_0_10_22,
     _WANDB_GREATER_EQUAL_0_12_10,
 )
+from pytorch_lightning.utilities.exceptions import MisconfigurationException
 from pytorch_lightning.utilities.rank_zero import rank_zero_warn
 
 try:
@@ -16,10 +15,10 @@ except ModuleNotFoundError:
     # needed for test mocks, these tests shall be updated
     wandb, Run = None, None
 
-from . import base
+from . import logger
 
 
-class WandbLogger(base.LightningLoggerBase, wandb_logger.WandbLogger):
+class WandbLogger(logger.Logger, wandb_logger.WandbLogger):
     def __init__(
         self,
         save_dir: str = "./",
@@ -77,6 +76,3 @@ class WandbLogger(base.LightningLoggerBase, wandb_logger.WandbLogger):
         if _WANDB_GREATER_EQUAL_0_12_10:
             wandb.require("service")
             _ = self.experiment
-
-
-pytorch_lightning.loggers.WandbLogger = WandbLogger

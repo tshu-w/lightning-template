@@ -2,10 +2,8 @@ import os
 from datetime import datetime
 from typing import Optional
 
-from pytorch_lightning.loggers import base
 
-
-class LightningLoggerBase:
+class Logger:
     """Base class for experiment loggers."""
 
     def __init__(
@@ -40,11 +38,3 @@ class LightningLoggerBase:
     def log_dir(self) -> str:
         """Return the experiment log directory."""
         return os.path.join(self.save_dir, self.name, self.version)
-
-
-# TEMP: https://github.com/PyTorchLightning/pytorch-lightning/issues/12529
-def init(self):
-    pass
-
-
-base.LightningLoggerBase.__init__ = init

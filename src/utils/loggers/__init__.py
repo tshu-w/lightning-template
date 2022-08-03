@@ -4,7 +4,13 @@ from typing import Optional
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 
-from . import base, csv, neptune, tensorboard, wandb
+from .csv import CSVLogger
+from .logger import Logger
+from .neptune import NeptuneLogger
+from .tensorboard import TensorBoardLogger
+from .wandb import WandbLogger
+
+__all__ = ["CSVLogger", "Logger", "NeptuneLogger", "TensorBoardLogger", "WandbLogger"]
 
 
 @property

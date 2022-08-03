@@ -1,13 +1,12 @@
-from typing import Optional
+from typing import Any, Optional
 
-import pytorch_lightning
 from pytorch_lightning.loggers import tensorboard
 from pytorch_lightning.utilities.cloud_io import get_filesystem
 
-from . import base
+from . import logger
 
 
-class TensorBoardLogger(base.LightningLoggerBase, tensorboard.TensorBoardLogger):
+class TensorBoardLogger(logger.Logger, tensorboard.TensorBoardLogger):
     def __init__(
         self,
         save_dir: str = "./",
@@ -17,7 +16,7 @@ class TensorBoardLogger(base.LightningLoggerBase, tensorboard.TensorBoardLogger)
         default_hp_metric: bool = True,
         prefix: str = "",
         sub_dir: Optional[str] = None,
-        **kwargs
+        **kwargs: Any,
     ):
         super().__init__(save_dir, name, version)
 
@@ -30,6 +29,3 @@ class TensorBoardLogger(base.LightningLoggerBase, tensorboard.TensorBoardLogger)
         self._experiment = None
         self.hparams = {}
         self._kwargs = kwargs
-
-
-pytorch_lightning.loggers.TensorBoardLogger = TensorBoardLogger
