@@ -2,10 +2,9 @@ import os
 from contextlib import contextmanager
 from typing import Optional
 
-import pytorch_lightning
 from pytorch_lightning import __version__
 from pytorch_lightning.loggers import neptune as neptune_logger
-from pytorch_lightning.loggers.base import rank_zero_experiment
+from pytorch_lightning.loggers.logger import rank_zero_experiment
 from pytorch_lightning.loggers.neptune import (
     _INTEGRATION_VERSION_KEY,
     _LEGACY_NEPTUNE_INIT_KWARGS,
@@ -30,7 +29,7 @@ else:
     # needed for test mocks, and function signatures
     neptune, Run, NeptuneFile = None, None, None
 
-from . import base
+from . import logger
 
 
 @contextmanager
@@ -43,7 +42,7 @@ def chdir(path):
         os.chdir(cwd)
 
 
-class NeptuneLogger(base.LightningLoggerBase, neptune_logger.NeptuneLogger):
+class NeptuneLogger(logger.Logger, neptune_logger.NeptuneLogger):
     def __init__(
         self,
         save_dir: str = "./",
@@ -175,6 +174,3 @@ class NeptuneLogger(base.LightningLoggerBase, neptune_logger.NeptuneLogger):
                 " available as part of neptune-contrib package:"
                 " https://docs-legacy.neptune.ai/integrations/pytorch_lightning.html\n"
             ) from e
-
-
-pytorch_lightning.loggers.NeptuneLogger = NeptuneLogger

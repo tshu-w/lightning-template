@@ -1,18 +1,18 @@
 seed_everything: 42
 trainer:
   logger:
-    # - class_path: pytorch_lightning.loggers.TensorBoardLogger
+    # - class_path: src.utils.loggers.TensorBoardLogger
     #   init_args:
     #     save_dir: "results"
-    # - class_path: pytorch_lightning.loggers.CSVLogger
+    # - class_path: src.utils.loggers.CSVLogger
     #   init_args:
     #     save_dir: "results"
-    - class_path: pytorch_lightning.loggers.WandbLogger
+    - class_path: src.utils.loggers.WandbLogger
       init_args:
-        project: lightning-template
         save_dir: "results"
-    # - class_path: pytorch_lightning.loggers.NeptuneLogger
+    # - class_path: src.utils.loggers.NeptuneLogger
     #   init_args:
     #     project: username/lightning-template
     #     save_dir: "results"
-  gpus: 1
+  accelerator: "auto"
+  devices: 1
