@@ -1,20 +1,14 @@
 import os
-from typing import Optional
+from datetime import datetime
 
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
-
-from .csv import CSVLogger
-from .logger import Logger
-from .neptune import NeptuneLogger
-from .tensorboard import TensorBoardLogger
-from .wandb import WandbLogger
-
-__all__ = ["CSVLogger", "Logger", "NeptuneLogger", "TensorBoardLogger", "WandbLogger"]
+from pytorch_lightning.loggers.tensorboard import TensorBoardLogger
+from pytorch_lightning.loggers.wandb import WandbLogger
 
 
 @property
-def log_dir(self) -> Optional[str]:
+def log_dir(self) -> str:
     if self.loggers:
         dirpath = self.loggers[0].log_dir
     else:
@@ -50,3 +44,33 @@ def __resolve_ckpt_dir(self, trainer: Trainer) -> None:
 
 
 ModelCheckpoint._ModelCheckpoint__resolve_ckpt_dir = __resolve_ckpt_dir
+
+@property
+def TensorBoardLogger_version(self) -> str:
+    """Get the experiment version.
+
+    Returns:
+        The experiment version if specified else current timestamp.
+    """
+    if self._version is None:
+        self._version = datetime.now().strftime("%m-%dT%H%M%S")
+
+    return self._version
+
+
+TensorBoardLogger.version = TensorBoardLogger_version
+
+@property
+def WandbLogger_log_dir(self) -> str:
+    if hasattr(self, "_log_dir"):
+        return self._log_dir
+
+    save_dir = self._save_dir
+    name = self.experiment.name
+    version = self.experiment.id
+    self._log_dir = os.path.join(save_dir, name, version)
+
+    return self._log_dir
+
+WandbLogger.log_dir = WandbLogger_log_dir
+
