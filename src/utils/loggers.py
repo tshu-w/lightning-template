@@ -44,6 +44,7 @@ def __resolve_ckpt_dir(self, trainer: Trainer) -> None:
 
 ModelCheckpoint._ModelCheckpoint__resolve_ckpt_dir = __resolve_ckpt_dir
 
+
 @property
 def TensorBoardLogger_version(self) -> str:
     """Get the experiment version.
