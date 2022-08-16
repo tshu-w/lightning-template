@@ -15,7 +15,7 @@ from pytorch_lightning.utilities.metrics import metrics_to_scalars
 
 class LitCLI(LightningCLI):
     def add_arguments_to_parser(self, parser: LightningArgumentParser) -> None:
-        parser.add_argument("-n", "--name", default="none", help="Experiment name")
+        parser.add_argument("-n", "--name", default=None, help="Experiment name")
         parser.add_argument(
             "-d",
             "--debug",
@@ -34,11 +34,8 @@ class LitCLI(LightningCLI):
     def before_instantiate_classes(self) -> None:
         config = self.config[self.subcommand]
         mode = "debug" if config.debug else self.subcommand
-        timestamp = datetime.now().strftime("%m-%dT%H%M%S")
 
-        config.trainer.default_root_dir = os.path.join(
-            "results", mode, config.name, timestamp
-        )
+        config.trainer.default_root_dir = os.path.join("results", mode)
 
         if mode == "debug":
             config.trainer.logger = None
@@ -51,8 +48,8 @@ class LitCLI(LightningCLI):
                 logger.init_args.save_dir = os.path.join(
                     logger.init_args.get("save_dir", "results"), self.subcommand
                 )
-                logger.init_args.name = config.name
-                logger.init_args.version = timestamp
+                if config.name:
+                    logger.init_args.name = config.name
 
     def after_run(self) -> None:
         results = {}
