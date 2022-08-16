@@ -61,6 +61,7 @@ def TensorBoardLogger_version(self) -> str:
 
 TensorBoardLogger.version = TensorBoardLogger_version
 
+
 @property
 def WandbLogger_log_dir(self) -> str:
     if hasattr(self, "_log_dir"):
@@ -73,5 +74,5 @@ def WandbLogger_log_dir(self) -> str:
 
     return self._log_dir
 
-WandbLogger.log_dir = WandbLogger_log_dir
 
+WandbLogger.log_dir = WandbLogger_log_dir

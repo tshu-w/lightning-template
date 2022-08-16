@@ -54,7 +54,6 @@ class LitCLI(LightningCLI):
                 if config.name:
                     logger.init_args.name = config.name
 
-
     def after_run(self) -> None:
         results = {}
 
