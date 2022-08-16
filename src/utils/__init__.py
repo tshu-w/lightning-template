@@ -1,2 +1,2 @@
-from . import loggers, shtab
+from . import shtab
 from .lit_cli import LitCLI
