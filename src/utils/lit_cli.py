@@ -36,7 +36,8 @@ class LitCLI(LightningCLI):
 
         config.trainer.default_root_dir = os.path.join("results", mode)
 
-        if mode == "debug":
+        if config.debug:
+            self.save_config_callback = None
             config.trainer.logger = None
 
         logger = config.trainer.logger
