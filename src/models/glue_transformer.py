@@ -5,12 +5,7 @@ import datasets
 import torch
 from pytorch_lightning import LightningModule
 from pytorch_lightning.utilities.types import EPOCH_OUTPUT, STEP_OUTPUT
-from transformers import (
-    AutoModelForSequenceClassification,
-    AutoTokenizer,
-    PreTrainedTokenizer,
-    get_linear_schedule_with_warmup,
-)
+from transformers import AutoModel, AutoTokenizer, PreTrainedTokenizer, get_scheduler
 
 
 class GLUETransformer(LightningModule):
@@ -24,6 +19,7 @@ class GLUETransformer(LightningModule):
         adam_epsilon: float = 1e-8,
         warmup_steps: int = 0,
         weight_decay: float = 0.0,
+        scheduler_type: str = "linear",
     ):
         super().__init__()
         self.save_hyperparameters()
@@ -138,7 +134,8 @@ class GLUETransformer(LightningModule):
             eps=self.hparams.adam_epsilon,
         )
 
-        scheduler = get_linear_schedule_with_warmup(
+        scheduler = get_scheduler(
+            self.hparams.scheduler_type,
             optimizer,
             num_warmup_steps=self.hparams.warmup_steps,
             num_training_steps=self.trainer.estimated_stepping_batches,
