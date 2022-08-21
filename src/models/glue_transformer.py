@@ -36,7 +36,7 @@ class GLUETransformer(LightningModule):
     def forward(self, batch):
         return self.model.forward(**batch)
 
-    def common_step(self, batch) -> Optional[STEP_OUTPUT]:
+    def shared_step(self, batch) -> Optional[STEP_OUTPUT]:
         output = self.forward(batch)
         loss, logits = output.loss, output.logits
         labels = batch["labels"]
@@ -51,19 +51,19 @@ class GLUETransformer(LightningModule):
     def training_step(
         self, batch, batch_idx: int, dataloader_idx: Optional[int] = None
     ) -> STEP_OUTPUT:
-        return self.common_step(batch)
+        return self.shared_step(batch)
 
     def validation_step(
         self, batch, batch_idx: int, dataloader_idx: Optional[int] = None
     ) -> Optional[STEP_OUTPUT]:
-        return self.common_step(batch)
+        return self.shared_step(batch)
 
     def test_step(
         self, batch, batch_idx: int, dataloader_idx: Optional[int] = None
     ) -> Optional[STEP_OUTPUT]:
-        return self.common_step(batch)
+        return self.shared_step(batch)
 
-    def common_epoch_end(self, outputs: EPOCH_OUTPUT, step: str) -> None:
+    def shared_epoch_end(self, outputs: EPOCH_OUTPUT, step: str) -> None:
         if hasattr(self.trainer.datamodule, f"{step}_splits"):
             splits = getattr(self.trainer.datamodule, f"{step}_splits")
             if len(splits) > 1:
@@ -100,13 +100,13 @@ class GLUETransformer(LightningModule):
         self.log_dict(metrics, prog_bar=True)
 
     def training_epoch_end(self, outputs: EPOCH_OUTPUT) -> None:
-        return self.common_epoch_end(outputs, "train")
+        return self.shared_epoch_end(outputs, "train")
 
     def validation_epoch_end(self, outputs: EPOCH_OUTPUT) -> None:
-        return self.common_epoch_end(outputs, "val")
+        return self.shared_epoch_end(outputs, "val")
 
     def test_epoch_end(self, outputs: EPOCH_OUTPUT) -> None:
-        return self.common_epoch_end(outputs, "test")
+        return self.shared_epoch_end(outputs, "test")
 
     def configure_optimizers(self):
         no_decay = ["bias", "LayerNorm.weight"]
