@@ -34,7 +34,7 @@ class MNISTModel(LightningModule):
 
         return x
 
-    def common_step(self, batch, step: str) -> Optional[STEP_OUTPUT]:
+    def shared_step(self, batch, step: str) -> Optional[STEP_OUTPUT]:
         x, y = batch
         logits = self.forward(x)
         loss = F.cross_entropy(logits, y)
@@ -49,13 +49,13 @@ class MNISTModel(LightningModule):
         return loss
 
     def training_step(self, batch, batch_idx: int) -> STEP_OUTPUT:
-        return self.common_step(batch, "train")
+        return self.shared_step(batch, "train")
 
     def validation_step(self, batch, batch_idx: int) -> Optional[STEP_OUTPUT]:
-        return self.common_step(batch, "val")
+        return self.shared_step(batch, "val")
 
     def test_step(self, batch, batch_idx: int) -> Optional[STEP_OUTPUT]:
-        return self.common_step(batch, "test")
+        return self.shared_step(batch, "test")
 
     def configure_optimizers(self):
         return torch.optim.Adam(params=self.parameters(), lr=self.hparams.learning_rate)
