@@ -1,5 +1,7 @@
 seed_everything: 42
 trainer:
+  callbacks:
+    class_path: Metric
   logger:
     class_path: WandbLogger
     init_args:
