@@ -1,15 +1,10 @@
 import argparse
-import json
-import logging
 import os
-from collections import ChainMap, defaultdict
-from pathlib import Path
+from collections import defaultdict
 from typing import Any, Iterable
 
 import shtab
 from pytorch_lightning.cli import LightningArgumentParser, LightningCLI
-from pytorch_lightning.trainer.states import TrainerFn
-from pytorch_lightning.utilities.metrics import metrics_to_scalars
 
 
 class LitCLI(LightningCLI):
@@ -50,54 +45,6 @@ class LitCLI(LightningCLI):
                 )
                 if config.name:
                     logger.init_args.name = config.name
-
-    def after_run(self) -> None:
-        results = {}
-
-        if self.trainer.state.fn == TrainerFn.FITTING:
-            if (
-                self.trainer.checkpoint_callback
-                and self.trainer.checkpoint_callback.best_model_path
-            ):
-                ckpt_path = self.trainer.checkpoint_callback.best_model_path
-                # inhibit disturbing logging
-                logging.getLogger("pytorch_lightning.utilities.distributed").setLevel(
-                    logging.WARNING
-                )
-                logging.getLogger("pytorch_lightning.accelerators.gpu").setLevel(
-                    logging.WARNING
-                )
-
-                self.trainer.callbacks = []
-                fn_kwargs = {
-                    "model": self.model,
-                    "datamodule": self.datamodule,
-                    "ckpt_path": ckpt_path,
-                }
-                has_val_loader = (
-                    self.trainer._data_connector._val_dataloader_source.is_defined()
-                )
-                has_test_loader = (
-                    self.trainer._data_connector._test_dataloader_source.is_defined()
-                )
-
-                val_results = (
-                    self.trainer.validate(**fn_kwargs) if has_val_loader else []
-                )
-                test_results = self.trainer.test(**fn_kwargs) if has_test_loader else []
-
-                results = dict(ChainMap(*val_results, *test_results))
-        else:
-            results = metrics_to_scalars(self.trainer.logged_metrics)
-
-        if results:
-            results_str = json.dumps(results, ensure_ascii=False, indent=2)
-
-            metrics_file = Path(self.trainer.log_dir) / "metrics.json"
-            with metrics_file.open("w") as f:
-                f.write(results_str)
-
-    after_fit = after_validate = after_test = after_run
 
     def setup_parser(
         self,
