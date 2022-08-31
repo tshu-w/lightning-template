@@ -7,4 +7,5 @@ trainer:
     init_args:
       save_dir: "results"
   accelerator: "auto"
+  auto_select_gpus: true
   devices: 1
