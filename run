@@ -8,7 +8,7 @@ from src.utils import LitCLI
 def main():
     os.chdir(os.path.dirname(__file__))
 
-    cli = LitCLI(
+    LitCLI(
         parser_kwargs={
             "default_config_files": ["configs/presets/default.yaml"],
         },
