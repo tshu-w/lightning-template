@@ -10,7 +10,10 @@ def main():
 
     LitCLI(
         parser_kwargs={
-            "default_config_files": ["configs/presets/default.yaml"],
+            cmd: {
+                "default_config_files": ["configs/presets/default.yaml"],
+            }
+            for cmd in ["fit", "validate", "test"]
         },
     )
 
