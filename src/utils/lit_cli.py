@@ -1,9 +1,7 @@
 import argparse
 import os
-from collections import defaultdict
-from typing import Any, Iterable
+from typing import Iterable
 
-import shtab
 from pytorch_lightning.cli import LightningArgumentParser, LightningCLI
 
 
@@ -50,25 +48,13 @@ class LitCLI(LightningCLI):
                 if config.name:
                     logger.init_args.name = config.name
 
-    def setup_parser(
-        self,
-        add_subcommands: bool,
-        main_kwargs: dict[str, Any],
-        subparser_kwargs: dict[str, Any],
-    ) -> None:
-        """Initialize and setup the parser, subcommands, and arguments."""
-        # move default_config_files to subparser_kwargs
-        if add_subcommands:
-            default_configs = main_kwargs.pop("default_config_files", None)
-            subparser_kwargs = defaultdict(dict, subparser_kwargs)
-            for subcmd in self.subcommands():
-                subparser_kwargs[subcmd]["default_config_files"] = default_configs
 
-        self.parser = self.init_parser(**main_kwargs)
-        shtab.add_argument_to(self.parser, ["-s", "--print-completion"])
+def get_cli_parser():
+    # provide cli.parser for shtab.
+    #
+    # shtab --shell {bash,zsh,tcsh} src.utils.lit_cli.get_cli_parser
+    # for more details see https://docs.iterative.ai/shtab/use/#cli-usage
+    from jsonargparse import capture_parser
 
-        if add_subcommands:
-            self._subcommand_method_arguments: dict[str, list[str]] = {}
-            self._add_subcommands(self.parser, **subparser_kwargs)
-        else:
-            self._add_arguments(self.parser)
+    parser = capture_parser(LitCLI)
+    return parser
