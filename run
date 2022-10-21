@@ -1,22 +1,4 @@
-#!/usr/bin/env python
+#!/bin/bash
+cd "$(dirname "$0")"
 
-import os
-
-from src.utils import LitCLI
-
-
-def main():
-    os.chdir(os.path.dirname(__file__))
-
-    LitCLI(
-        parser_kwargs={
-            cmd: {
-                "default_config_files": ["configs/presets/default.yaml"],
-            }
-            for cmd in ["fit", "validate", "test"]
-        },
-    )
-
-
-if __name__ == "__main__":
-    main()
+python -m src.utils.lit_cli "$@"
