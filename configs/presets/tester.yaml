@@ -1,3 +1,2 @@
 trainer:
   fast_dev_run: 5
-debug: true
