@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 
+from lightning_lite.utilities.types import _PATH
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers.tensorboard import TensorBoardLogger
@@ -20,7 +21,7 @@ def log_dir(self) -> str:
 Trainer.log_dir = log_dir
 
 
-def __resolve_ckpt_dir(self, trainer: Trainer) -> None:
+def __resolve_ckpt_dir(self, trainer: Trainer) -> _PATH:
     """Determines model checkpoint save directory at runtime. References attributes from the trainer's logger
     to determine where to save checkpoints. The base path for saving weights is set in this priority:
     1.  Checkpoint callback's path (if passed in)
@@ -31,18 +32,15 @@ def __resolve_ckpt_dir(self, trainer: Trainer) -> None:
     """
     if self.dirpath is not None:
         return  # short circuit
-
     if trainer.loggers:
         ckpt_path = os.path.join(trainer.log_dir, "checkpoints")
     else:
         ckpt_path = os.path.join(trainer.default_root_dir, "checkpoints")
-
-    ckpt_path = trainer.strategy.broadcast(ckpt_path)
-
-    self.dirpath = ckpt_path
+    return ckpt_path
 
 
 ModelCheckpoint._ModelCheckpoint__resolve_ckpt_dir = __resolve_ckpt_dir
+
 
 @property
 def TensorBoardLogger_version(self) -> str:
