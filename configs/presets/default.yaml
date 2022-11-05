@@ -1,12 +1,13 @@
 seed_everything: 42
 trainer:
+  default_root_dir: results
   callbacks:
     class_path: Metric
   logger:
     class_path: WandbLogger
     init_args:
-      project: "lightning-template"
-      save_dir: "results"
-  accelerator: "auto"
+      project: lightning-template
+      save_dir: results
+  accelerator: auto
   auto_select_gpus: true
   devices: 1

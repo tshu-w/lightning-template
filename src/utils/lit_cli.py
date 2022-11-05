@@ -1,4 +1,3 @@
-import argparse
 import os
 from typing import Iterable
 
@@ -7,15 +6,6 @@ from pytorch_lightning.cli import LightningArgumentParser, LightningCLI
 
 class LitCLI(LightningCLI):
     def add_arguments_to_parser(self, parser: LightningArgumentParser) -> None:
-        parser.add_argument("-n", "--name", default=None, help="Experiment name")
-        parser.add_argument(
-            "-d",
-            "--debug",
-            default=False,
-            action=argparse.BooleanOptionalAction,
-            help="Debug mode",
-        )
-
         for arg in ["num_labels", "task_name"]:
             parser.link_arguments(
                 f"data.init_args.{arg}",
@@ -25,28 +15,37 @@ class LitCLI(LightningCLI):
 
     def before_instantiate_classes(self) -> None:
         config = self.config[self.subcommand]
-        mode = "debug" if config.debug else self.subcommand
 
-        config.trainer.default_root_dir = os.path.join("results", mode)
-
-        if config.debug:
-            self.save_config_callback = None
+        # HACK: https://github.com/Lightning-AI/lightning/issues/15233
+        if config.trainer.fast_dev_run:
             config.trainer.logger = None
 
         logger = config.trainer.logger
-        assert logger != True, "should assign trainer.logger with the specific logger."
-        if logger:
+        if logger and logger != True:
             loggers = logger if isinstance(logger, Iterable) else [logger]
             for logger in loggers:
                 logger.init_args.save_dir = os.path.join(
                     logger.init_args.get("save_dir", "results"), self.subcommand
                 )
-                # HACK: https://github.com/Lightning-AI/lightning/issues/14225
-                if hasattr(logger.init_args, "dir"):
-                    logger.init_args.dir = logger.init_args.save_dir
+                # rules to customize the experiment name
+                exp_name = config.model.class_path.split(".")[-1]
+                if hasattr(config, "data"):
+                    data_name = config.data.class_path.split(".")[-1]
+                    exp_name = f"{exp_name}/{data_name}"
+                if hasattr(logger.init_args, "name"):
+                    logger.init_args.name = exp_name
 
-                if config.name:
-                    logger.init_args.name = config.name
+
+def lit_cli():
+    LitCLI(
+        parser_kwargs={
+            cmd: {
+                "default_config_files": ["configs/presets/default.yaml"],
+            }
+            for cmd in ["fit", "validate", "test"]
+        },
+        save_config_kwargs={"overwrite": True},
+    )
 
 
 def get_cli_parser():
@@ -56,5 +55,9 @@ def get_cli_parser():
     # for more details see https://docs.iterative.ai/shtab/use/#cli-usage
     from jsonargparse import capture_parser
 
-    parser = capture_parser(LitCLI)
+    parser = capture_parser(lit_cli)
     return parser
+
+
+if __name__ == "__main__":
+    lit_cli()

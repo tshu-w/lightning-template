@@ -1,3 +1,2 @@
 trainer:
   overfit_batches: 0.01
-debug: true

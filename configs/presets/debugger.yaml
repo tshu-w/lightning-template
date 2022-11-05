@@ -1,5 +1,4 @@
 trainer:
   accelerator: "cpu"
-  max_epochs: 1
   detect_anomaly: true
-debug: true
+  fast_dev_run: 1
