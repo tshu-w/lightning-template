@@ -5,6 +5,7 @@ from typing import Optional
 
 import pytorch_lightning as pl
 from pytorch_lightning import Callback
+from pytorch_lightning.callbacks import BatchSizeFinder
 from pytorch_lightning.trainer.states import TrainerFn
 from pytorch_lightning.utilities.metrics import metrics_to_scalars
 
@@ -43,13 +44,13 @@ class Metric(Callback):
 
                 val_metrics = {}
                 if trainer._data_connector._val_dataloader_source.is_defined():
-                    trainer.callbacks = []
+                    trainer.callbacks = [BatchSizeFinder()]
                     trainer.validate(**fn_kwargs)
                     val_metrics = metrics_to_scalars(trainer.logged_metrics)
 
                 test_metrics = {}
                 if trainer._data_connector._test_dataloader_source.is_defined():
-                    trainer.callbacks = []
+                    trainer.callbacks = [BatchSizeFinder()]
                     trainer.test(**fn_kwargs)
                     test_metrics = metrics_to_scalars(trainer.logged_metrics)
 
