@@ -26,7 +26,7 @@ RUN curl -o miniconda3.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-
   conda clean -ay && \
   echo "source activate ${CONDA_ENV}" >> ~/.bashrc
 
-COPY environment.yaml requirements.txt ./
+COPY environment.yaml *requirements.txt ./
 RUN \
   ([ ! -f environment.yaml ] || conda env update -n ${CONDA_ENV} -f environment.yaml) && \
   ([ ! -f requirements.txt ] || pip install --no-cache-dir -r requirements.txt) && \
