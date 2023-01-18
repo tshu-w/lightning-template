@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from lightning_lite.utilities.types import _PATH
+from lightning_fabric.utilities.types import _PATH
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers.tensorboard import TensorBoardLogger
@@ -27,11 +27,10 @@ def __resolve_ckpt_dir(self, trainer: Trainer) -> _PATH:
     1.  Checkpoint callback's path (if passed in)
     2.  The default_root_dir from trainer if trainer has no logger
     3.  The log_dir from trainer, if trainer has logger
-    The base path gets extended with logger name and version (if these are available)
-    and subfolder "checkpoints".
     """
     if self.dirpath is not None:
-        return  # short circuit
+        # short circuit if dirpath was passed to ModelCheckpoint
+        return self.dirpath
     if trainer.loggers:
         ckpt_path = os.path.join(trainer.log_dir, "checkpoints")
     else:
