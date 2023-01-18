@@ -22,7 +22,7 @@ class MNISTModel(LightningModule):
         self.l1 = torch.nn.Linear(input_size, hidden_dim)
         self.l2 = torch.nn.Linear(hidden_dim, output_size)
 
-        metrics = MetricCollection({"acc": Accuracy()})
+        metrics = MetricCollection({"acc": Accuracy(task="multiclass", num_classes=10)})
         self.train_metrics = metrics.clone(prefix="train/")
         self.val_metrics = metrics.clone(prefix="val/")
         self.test_metrics = metrics.clone(prefix="test/")

@@ -1,11 +1,11 @@
 --find-links https://download.pytorch.org/whl/cu113/torch_stable.html
 torch >= 1.12.0
 torchvision >= 0.13.0
-pytorch-lightning[extra] >= 1.8.0
+pytorch-lightning >= 1.9.0
+jsonargparse[signatures] # for CLI
 
-transformers >= 4.20.0
-datasets >= 2.4.0
-# for GLUE datasets
+transformers >= 4.25.0
+datasets >= 2.8.0
 scikit-learn
 
 wandb
