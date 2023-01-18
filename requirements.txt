@@ -8,4 +8,6 @@ transformers >= 4.25.0
 datasets >= 2.8.0
 scikit-learn
 
+# dev tools
 jupyterlab
+shtab
