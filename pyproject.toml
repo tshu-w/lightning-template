@@ -2,20 +2,20 @@
 [tool.black]
 line-length = 88
 
-# https://github.com/timothycrosley/isort/
-[tool.isort]
-profile = "black"
-line_length = 88
-combine_as_imports = true
-combine_star = true
-
-# https://github.com/hadialqattan/pycln
-[tool.pycln]
-all = true
-
 # https://github.com/microsoft/pyright
 [tool.pyright]
 include = ["src"]
 venv = "template"
 typeCheckingMode = "off"
 useLibraryCodeForTypes = true
+
+# https://github.com/charliermarsh/ruff
+[tool.ruff]
+select = ["E", "F", "I", "UP"]
+fix = true
+ignore = ["E501"]
+target-version = "py38"
+
+# https://github.com/timothycrosley/isort/
+[tool.ruff.isort]
+combine-as-imports = true

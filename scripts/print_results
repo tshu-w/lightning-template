@@ -3,7 +3,6 @@
 
 import argparse
 import json
-import os
 from pathlib import Path
 from signal import SIG_DFL, SIGPIPE, signal
 

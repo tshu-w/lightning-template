@@ -10,22 +10,10 @@ repos:
       - id: check-added-large-files
       - id: check-executables-have-shebangs
 
-  - repo: https://github.com/hadialqattan/pycln
-    rev: v1.3.3
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.0.230
     hooks:
-      - id: pycln
-        args: [--config=pyproject.toml, --silence]
-
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v2.34.0
-    hooks:
-      - id: pyupgrade
-        args: [--py39-plus]
-
-  - repo: https://github.com/pycqa/isort
-    rev: 5.10.1
-    hooks:
-      - id: isort
+      - id: ruff
 
   - repo: https://github.com/psf/black
     rev: 22.3.0
