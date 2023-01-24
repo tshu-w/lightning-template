@@ -21,7 +21,7 @@ class LitCLI(LightningCLI):
             config.trainer.logger = None
 
         logger = config.trainer.logger
-        if logger and logger != True:
+        if logger and logger is not True:
             loggers = logger if isinstance(logger, Iterable) else [logger]
             for logger in loggers:
                 logger.init_args.save_dir = os.path.join(

@@ -1,3 +1,3 @@
-import src.callbacks
-import src.datamodules
-import src.models
+from . import callbacks, datamodules, models
+
+__all__ = ["callbacks", "datamodules", "models"]
