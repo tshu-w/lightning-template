@@ -28,8 +28,8 @@ git clone https://github.com/YourGithubName/your-repository-name
 cd your-repository-name
 
 # [SUGGESTED] use conda environment
-conda env create -n template -f environment.yaml
-conda activate template
+conda env create -f environment.yaml
+conda activate lit-template
 
 # [ALTERNATIVE] install requirements directly
 pip install -r requirements.txt

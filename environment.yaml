@@ -1,3 +1,4 @@
+name: lit-template
 channels:
   - defaults
   - conda-forge
