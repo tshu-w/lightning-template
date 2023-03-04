@@ -5,7 +5,7 @@ line-length = 88
 # https://github.com/microsoft/pyright
 [tool.pyright]
 include = ["src"]
-venv = "template"
+venv = "lit-template"
 typeCheckingMode = "off"
 useLibraryCodeForTypes = true
 
