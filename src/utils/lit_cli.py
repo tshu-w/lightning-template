@@ -1,7 +1,8 @@
 import os
 from typing import Iterable
 
-from pytorch_lightning.cli import LightningArgumentParser, LightningCLI
+import torch
+from lightning.pytorch.cli import LightningArgumentParser, LightningCLI
 
 
 class LitCLI(LightningCLI):
@@ -15,10 +16,6 @@ class LitCLI(LightningCLI):
 
     def before_instantiate_classes(self) -> None:
         config = self.config[self.subcommand]
-
-        # HACK: https://github.com/Lightning-AI/lightning/issues/15233
-        if config.trainer.fast_dev_run:
-            config.trainer.logger = None
 
         logger = config.trainer.logger
         if logger and logger is not True:
@@ -34,6 +31,13 @@ class LitCLI(LightningCLI):
                     exp_name = f"{exp_name}/{data_name}"
                 if hasattr(logger.init_args, "name"):
                     logger.init_args.name = exp_name
+
+    def before_run(self) -> None:
+        if hasattr(torch, "compile"):
+            # https://pytorch.org/get-started/pytorch-2.0/#user-experience
+            torch.compile(self.model)
+
+    before_fit = before_validate = before_test = before_run
 
 
 def lit_cli():

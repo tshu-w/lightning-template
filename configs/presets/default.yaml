@@ -4,7 +4,7 @@ trainer:
   callbacks:
     class_path: Metric
   logger:
-    class_path: TensorBoardLogger
+    class_path: CSVLogger
     init_args:
       save_dir: results
   accelerator: auto

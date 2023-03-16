@@ -1,13 +1,13 @@
 from typing import Optional
 
-from pytorch_lightning import LightningDataModule
-from pytorch_lightning.utilities.types import EVAL_DATALOADERS, TRAIN_DATALOADERS
+import lightning.pytorch as pl
+from lightning.pytorch.utilities.types import EVAL_DATALOADERS, TRAIN_DATALOADERS
 from torch.utils.data import DataLoader, random_split
 from torchvision.datasets import MNIST
 from torchvision.transforms import transforms
 
 
-class MNISTDataModule(LightningDataModule):
+class MNISTDataModule(pl.LightningDataModule):
     def __init__(
         self,
         data_dir: str = "data/",

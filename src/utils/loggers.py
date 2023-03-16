@@ -1,10 +1,8 @@
 import os
-from datetime import datetime
 
-from lightning_fabric.utilities.types import _PATH
-from pytorch_lightning import Trainer
-from pytorch_lightning.callbacks import ModelCheckpoint
-from pytorch_lightning.loggers.tensorboard import TensorBoardLogger
+import lightning.pytorch as pl
+from lightning.fabric.utilities.types import _PATH
+from lightning.pytorch.callbacks import ModelCheckpoint
 
 
 @property
@@ -18,10 +16,10 @@ def log_dir(self) -> str:
     return dirpath
 
 
-Trainer.log_dir = log_dir
+pl.Trainer.log_dir = log_dir
 
 
-def __resolve_ckpt_dir(self, trainer: Trainer) -> _PATH:
+def __resolve_ckpt_dir(self, trainer: pl.Trainer) -> _PATH:
     """Determines model checkpoint save directory at runtime. References attributes from the trainer's logger
     to determine where to save checkpoints. The base path for saving weights is set in this priority:
     1.  Checkpoint callback's path (if passed in)
@@ -39,19 +37,3 @@ def __resolve_ckpt_dir(self, trainer: Trainer) -> _PATH:
 
 
 ModelCheckpoint._ModelCheckpoint__resolve_ckpt_dir = __resolve_ckpt_dir
-
-
-@property
-def TensorBoardLogger_version(self) -> str:
-    """Get the experiment version.
-
-    Returns:
-        The experiment version if specified else current timestamp.
-    """
-    if self._version is None:
-        self._version = datetime.now().strftime("%m-%dT%H%M%S")
-
-    return self._version
-
-
-TensorBoardLogger.version = TensorBoardLogger_version
