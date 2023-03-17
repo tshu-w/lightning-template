@@ -5,9 +5,12 @@ from lightning.fabric.utilities.types import _PATH
 from lightning.pytorch.callbacks import ModelCheckpoint
 
 
+# TODO:
+# https://github.com/Lightning-AI/lightning/issues/14188
+# https://github.com/Lightning-AI/lightning/pull/14640
 @property
 def log_dir(self) -> str:
-    if self.loggers:
+    if self.loggers and self.loggers[0].log_dir is not None:
         dirpath = self.loggers[0].log_dir
     else:
         dirpath = self.default_root_dir
