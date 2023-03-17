@@ -4,9 +4,8 @@ trainer:
   callbacks:
     class_path: Metric
   logger:
-    class_path: WandbLogger
+    class_path: CSVLogger
     init_args:
-      project: lightning-template
       save_dir: results
   accelerator: auto
   devices: 1

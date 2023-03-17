@@ -40,19 +40,3 @@ def __resolve_ckpt_dir(self, trainer: pl.Trainer) -> _PATH:
 
 
 ModelCheckpoint._ModelCheckpoint__resolve_ckpt_dir = __resolve_ckpt_dir
-
-
-@property
-def WandbLogger_log_dir(self) -> str:
-    if hasattr(self, "_log_dir"):
-        return self._log_dir
-
-    save_dir = self._save_dir
-    name = self.experiment.name
-    version = self.experiment.id
-    self._log_dir = os.path.join(save_dir, name, version)
-
-    return self._log_dir
-
-
-WandbLogger.log_dir = WandbLogger_log_dir

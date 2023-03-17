@@ -12,4 +12,3 @@ scikit-learn
 # dev tools
 jupyterlab
 shtab
-wandb
