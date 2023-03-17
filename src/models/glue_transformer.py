@@ -1,10 +1,10 @@
 from functools import partial
 from typing import Any, Optional, Union
 
-import datasets
+import evaluate
+import lightning.pytorch as pl
 import torch
-from pytorch_lightning import LightningModule
-from pytorch_lightning.utilities.types import EPOCH_OUTPUT, STEP_OUTPUT
+from lightning.pytorch.utilities.types import STEP_OUTPUT
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
@@ -13,7 +13,7 @@ from transformers import (
 )
 
 
-class GLUETransformer(LightningModule):
+class GLUETransformer(pl.LightningModule):
     def __init__(
         self,
         task_name: str,
@@ -36,7 +36,10 @@ class GLUETransformer(LightningModule):
         self.model = AutoModelForSequenceClassification.from_pretrained(
             model_name_or_path
         )
-        self.metric = datasets.load_metric("glue", task_name)
+        self.metric = evaluate.load("glue", task_name)
+
+        self.validation_step_outputs = []
+        self.test_step_outputs = []
 
     def forward(self, batch):
         return self.model.forward(**batch)
@@ -61,14 +64,18 @@ class GLUETransformer(LightningModule):
     def validation_step(
         self, batch, batch_idx: int, dataloader_idx: Optional[int] = None
     ) -> Optional[STEP_OUTPUT]:
-        return self.shared_step(batch)
+        output = self.shared_step(batch)
+        self.validation_step_outputs.append(output)
+        return output
 
     def test_step(
         self, batch, batch_idx: int, dataloader_idx: Optional[int] = None
     ) -> Optional[STEP_OUTPUT]:
-        return self.shared_step(batch)
+        output = self.shared_step(batch)
+        self.test_step_outputs.append(output)
+        return output
 
-    def shared_epoch_end(self, outputs: EPOCH_OUTPUT, step: str) -> None:
+    def shared_epoch_end(self, outputs, step: str) -> None:
         if hasattr(self.trainer.datamodule, f"{step}_splits"):
             splits = getattr(self.trainer.datamodule, f"{step}_splits")
             if len(splits) > 1:
@@ -104,14 +111,16 @@ class GLUETransformer(LightningModule):
         self.log(f"{step}/loss", loss)
         self.log_dict(metrics, prog_bar=True)
 
-    def training_epoch_end(self, outputs: EPOCH_OUTPUT) -> None:
-        return self.shared_epoch_end(outputs, "train")
+    def on_training_epoch_end(self) -> None:
+        self.shared_epoch_end(self.training_step_outputs, "train")
 
-    def validation_epoch_end(self, outputs: EPOCH_OUTPUT) -> None:
-        return self.shared_epoch_end(outputs, "val")
+    def on_validation_epoch_end(self) -> None:
+        self.shared_epoch_end(self.validation_step_outputs, "val")
+        self.validation_step_outputs.clear()
 
-    def test_epoch_end(self, outputs: EPOCH_OUTPUT) -> None:
-        return self.shared_epoch_end(outputs, "test")
+    def on_test_epoch_end(self) -> None:
+        self.shared_epoch_end(self.test_step_outputs, "test")
+        self.test_step_outputs.clear()
 
     def configure_optimizers(self):
         no_decay = ["bias", "LayerNorm.weight"]

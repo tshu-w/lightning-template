@@ -1,5 +1,4 @@
 # HACK for shtab
-# https://github.com/omni-us/jsonargparse/issues/127
 # https://github.com/iterative/shtab/issues/65
 
 import shtab
