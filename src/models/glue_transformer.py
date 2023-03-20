@@ -20,11 +20,10 @@ class GLUETransformer(pl.LightningModule):
         model_name_or_path: str,
         num_labels: int,
         max_length: Optional[int] = None,
-        learning_rate: float = 2e-5,
-        adam_epsilon: float = 1e-8,
-        warmup_steps: int = 0,
         weight_decay: float = 0.0,
+        learning_rate: float = 2e-5,
         scheduler_type: str = "linear",
+        warmup_steps: int = 0,
     ):
         super().__init__()
         self.save_hyperparameters()
@@ -145,7 +144,6 @@ class GLUETransformer(pl.LightningModule):
         optimizer = torch.optim.AdamW(
             optimizer_grouped_parameters,
             lr=self.hparams.learning_rate,
-            eps=self.hparams.adam_epsilon,
         )
 
         scheduler = get_scheduler(
