@@ -1,7 +1,7 @@
 FROM nvidia/cuda:11.3.1-cudnn8-devel-ubuntu20.04
 
 ARG CONDA_ENV=env
-ARG PYTHON_VERSION=3.9
+ARG PYTHON_VERSION=3.10
 
 SHELL ["/bin/bash", "-c"]
 
