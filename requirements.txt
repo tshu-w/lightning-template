@@ -5,9 +5,9 @@ torchvision
 jsonargparse[signatures] # for CLI
 
 transformers
+scikit-learn
 datasets
 evaluate
-scikit-learn
 
 # dev tools
 jupyterlab
