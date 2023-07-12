@@ -1,0 +1,12 @@
+fit:
+  debug: false
+  gpus_per_trial: 1
+  configs:
+    - configs/mnist.yaml
+  override_kwargs:
+    seed_everything:
+      - 123
+      - 42
+    trainer.max_epochs: 5
+    data.batch_size:
+      - 64
