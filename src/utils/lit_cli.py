@@ -1,7 +1,6 @@
 import os
 from typing import Iterable
 
-import torch
 from lightning.pytorch.cli import LightningArgumentParser, LightningCLI
 
 
@@ -17,27 +16,14 @@ class LitCLI(LightningCLI):
     def before_instantiate_classes(self) -> None:
         config = self.config[self.subcommand]
 
+        default_root_dir = config.trainer.default_root_dir
         logger = config.trainer.logger
         if logger and logger is not True:
             loggers = logger if isinstance(logger, Iterable) else [logger]
             for logger in loggers:
                 logger.init_args.save_dir = os.path.join(
-                    logger.init_args.get("save_dir", "results"), self.subcommand
+                    default_root_dir, self.subcommand
                 )
-                # rules to customize the experiment name
-                exp_name = config.model.class_path.split(".")[-1]
-                if hasattr(config, "data"):
-                    data_name = config.data.class_path.split(".")[-1]
-                    exp_name = f"{exp_name}/{data_name}"
-                if hasattr(logger.init_args, "name"):
-                    logger.init_args.name = exp_name
-
-    def before_run(self) -> None:
-        if hasattr(torch, "compile"):
-            # https://pytorch.org/get-started/pytorch-2.0/#user-experience
-            torch.compile(self.model)
-
-    before_fit = before_validate = before_test = before_run
 
 
 def lit_cli():
