@@ -1,5 +1,3 @@
-from typing import Optional
-
 import lightning.pytorch as pl
 from lightning.pytorch.utilities.types import EVAL_DATALOADERS, TRAIN_DATALOADERS
 from torch.utils.data import DataLoader, random_split
@@ -25,7 +23,7 @@ class MNISTDataModule(pl.LightningDataModule):
         MNIST(self.hparams.data_dir, train=True, download=True)
         MNIST(self.hparams.data_dir, train=False, download=True)
 
-    def setup(self, stage: Optional[str] = None) -> None:
+    def setup(self, stage: str | None = None) -> None:
         if not self.data:
             dataset = MNIST(
                 self.hparams.data_dir, train=True, transform=self.transforms
