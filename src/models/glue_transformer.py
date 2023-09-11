@@ -1,5 +1,5 @@
 from functools import partial
-from typing import Any, Optional, Union
+from typing import Any
 
 import evaluate
 import lightning.pytorch as pl
@@ -19,7 +19,7 @@ class GLUETransformer(pl.LightningModule):
         task_name: str,
         model_name_or_path: str,
         num_labels: int,
-        max_length: Optional[int] = None,
+        max_length: int | None = None,
         weight_decay: float = 0.0,
         learning_rate: float = 2e-5,
         scheduler_type: str = "linear",
@@ -43,7 +43,7 @@ class GLUETransformer(pl.LightningModule):
     def forward(self, batch):
         return self.model.forward(**batch)
 
-    def shared_step(self, batch) -> Optional[STEP_OUTPUT]:
+    def shared_step(self, batch) -> STEP_OUTPUT | None:
         output = self.forward(batch)
         loss, logits = output.loss, output.logits
         labels = batch["labels"]
@@ -56,20 +56,20 @@ class GLUETransformer(pl.LightningModule):
         return {"loss": loss, "preds": preds, "labels": labels}
 
     def training_step(
-        self, batch, batch_idx: int, dataloader_idx: Optional[int] = None
+        self, batch, batch_idx: int, dataloader_idx: int | None = None
     ) -> STEP_OUTPUT:
         return self.shared_step(batch)
 
     def validation_step(
-        self, batch, batch_idx: int, dataloader_idx: Optional[int] = None
-    ) -> Optional[STEP_OUTPUT]:
+        self, batch, batch_idx: int, dataloader_idx: int | None = None
+    ) -> STEP_OUTPUT | None:
         output = self.shared_step(batch)
         self.validation_step_outputs.append(output)
         return output
 
     def test_step(
-        self, batch, batch_idx: int, dataloader_idx: Optional[int] = None
-    ) -> Optional[STEP_OUTPUT]:
+        self, batch, batch_idx: int, dataloader_idx: int | None = None
+    ) -> STEP_OUTPUT | None:
         output = self.shared_step(batch)
         self.test_step_outputs.append(output)
         return output
@@ -158,10 +158,10 @@ class GLUETransformer(pl.LightningModule):
 
     @staticmethod
     def _convert_to_features(
-        batch: Union[dict[str, list], list[Any]],
+        batch: dict[str, list] | list[Any],
         tokenizer: PreTrainedTokenizer,
-        max_length: Optional[int] = None,
-    ) -> Union[dict, Any]:
+        max_length: int | None = None,
+    ) -> dict | Any:
         features = tokenizer(
             batch["text"],
             padding="max_length",

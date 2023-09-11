@@ -1,5 +1,3 @@
-from typing import Optional
-
 import lightning.pytorch as pl
 import torch
 import torch.nn.functional as F
@@ -34,7 +32,7 @@ class MNISTModel(pl.LightningModule):
 
         return x
 
-    def shared_step(self, batch, step: str) -> Optional[STEP_OUTPUT]:
+    def shared_step(self, batch, step: str) -> STEP_OUTPUT | None:
         x, y = batch
         logits = self.forward(x)
         loss = F.cross_entropy(logits, y)
@@ -51,10 +49,10 @@ class MNISTModel(pl.LightningModule):
     def training_step(self, batch, batch_idx: int) -> STEP_OUTPUT:
         return self.shared_step(batch, "train")
 
-    def validation_step(self, batch, batch_idx: int) -> Optional[STEP_OUTPUT]:
+    def validation_step(self, batch, batch_idx: int) -> STEP_OUTPUT | None:
         return self.shared_step(batch, "val")
 
-    def test_step(self, batch, batch_idx: int) -> Optional[STEP_OUTPUT]:
+    def test_step(self, batch, batch_idx: int) -> STEP_OUTPUT | None:
         return self.shared_step(batch, "test")
 
     def configure_optimizers(self):

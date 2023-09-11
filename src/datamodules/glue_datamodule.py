@@ -1,6 +1,6 @@
 import warnings
 from functools import partial
-from typing import Literal, Optional
+from typing import Literal
 
 import lightning.pytorch as pl
 from datasets import load_dataset
@@ -70,7 +70,7 @@ class GLUEDataModule(pl.LightningDataModule):
         # setup first to prevent datasets cache conflicts in multiple processes.
         self.setup()
 
-    def setup(self, stage: Optional[str] = None) -> None:
+    def setup(self, stage: str | None = None) -> None:
         if not hasattr(self, "datasets"):
             convert_to_features = self.trainer.model.convert_to_features
             preprocess_fn = partial(self._preprocess, text_fields=self.text_fields)
