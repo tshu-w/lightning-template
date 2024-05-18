@@ -88,8 +88,8 @@ class GLUEDataModule(pl.LightningDataModule):
 
             self.datasets.set_format(type="torch")
 
-            self.val_splits = [x for x in self.datasets.keys() if "validation" in x]
-            self.test_splits = [x for x in self.datasets.keys() if "test" in x]
+            self.val_splits = [x for x in self.datasets if "validation" in x]
+            self.test_splits = [x for x in self.datasets if "test" in x]
 
         self.collate_fn = getattr(self.trainer.model, "collate_fn", None)
 
@@ -139,7 +139,7 @@ class GLUEDataModule(pl.LightningDataModule):
     @staticmethod
     def _preprocess(batch, text_fields):
         if len(text_fields) > 1:
-            text = list(zip(batch[text_fields[0]], batch[text_fields[1]]))
+            text = list(zip(batch[text_fields[0]], batch[text_fields[1]], strict=True))
         else:
             text = batch[text_fields[0]]
         labels = batch["label"]
