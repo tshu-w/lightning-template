@@ -110,19 +110,5 @@ def sweep_cli():
     CLI([fit, validate, test])
 
 
-def get_cli_parser():
-    # provide cli.parser for shtab.
-    #
-    # install shtab in the same env and run
-    # shtab --shell {bash,zsh,tcsh} src.utils.lit_cli.get_cli_parser
-    # for more details see https://docs.iterative.ai/shtab/use/#cli-usage
-    from jsonargparse import capture_parser
-
-    from . import tweak_shtab  # noqa
-
-    parser = capture_parser(sweep_cli)
-    return parser
-
-
 if __name__ == "__main__":
     sweep_cli()
