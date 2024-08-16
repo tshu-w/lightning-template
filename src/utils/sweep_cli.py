@@ -3,15 +3,13 @@ import json
 import math
 import os
 import shlex
+import subprocess
 from pathlib import Path
 from typing import Any, Literal
-from unittest.mock import patch
 
 import ray
 from jsonargparse import CLI
 from ray import train, tune
-
-from src.utils.lit_cli import lit_cli
 
 ray.init(_temp_dir=str(Path.home() / ".cache" / "ray"))
 
@@ -46,8 +44,7 @@ def run_cli(config, debug: bool = True, command: str = "fit", devices: int = 1):
         argv.extend(["--config", "configs/presets/tester.yaml"])
 
     print(shlex.join(argv))
-    with patch("sys.argv", argv):
-        lit_cli()
+    subprocess.check_output(argv)
 
 
 def sweep(
