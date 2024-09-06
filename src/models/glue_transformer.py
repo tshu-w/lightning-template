@@ -2,7 +2,7 @@ from functools import partial
 from typing import Any
 
 import evaluate
-import lightning.pytorch as pl
+import lightning as L
 import torch
 from lightning.pytorch.utilities.types import STEP_OUTPUT
 from transformers import (
@@ -13,7 +13,7 @@ from transformers import (
 )
 
 
-class GLUETransformer(pl.LightningModule):
+class GLUETransformer(L.LightningModule):
     def __init__(
         self,
         task_name: str,

@@ -1,4 +1,4 @@
-import lightning.pytorch as pl
+import lightning as L
 import torch
 import torch.nn.functional as F
 from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
@@ -6,7 +6,7 @@ from lightning.pytorch.utilities.types import STEP_OUTPUT
 from torchmetrics import Accuracy, MetricCollection
 
 
-class MNISTModel(pl.LightningModule):
+class MNISTModel(L.LightningModule):
     def __init__(
         self,
         input_size: int = 28 * 28,

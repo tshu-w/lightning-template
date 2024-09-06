@@ -2,7 +2,7 @@ import warnings
 from functools import partial
 from typing import Literal
 
-import lightning.pytorch as pl
+import lightning as L
 from datasets import load_dataset
 from lightning.pytorch.utilities.types import EVAL_DATALOADERS, TRAIN_DATALOADERS
 from torch.utils.data import DataLoader
@@ -25,7 +25,7 @@ TASK_NAME = Literal[
 ]
 
 
-class GLUEDataModule(pl.LightningDataModule):
+class GLUEDataModule(L.LightningDataModule):
     task_text_field_map = {
         "cola": ["sentence"],
         "sst2": ["sentence"],

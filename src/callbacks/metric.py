@@ -2,20 +2,20 @@ import json
 import logging
 from pathlib import Path
 
-import lightning.pytorch as pl
+import lightning as L
 from lightning.fabric.utilities.apply_func import convert_tensors_to_scalars
 from lightning.pytorch.trainer.states import TrainerFn
 
 
-class Metric(pl.Callback):
+class Metric(L.Callback):
     r"""
     Save logged metrics to ``Trainer.log_dir``.
     """
 
     def teardown(
         self,
-        trainer: pl.Trainer,
-        pl_module: pl.LightningModule,
+        trainer: L.Trainer,
+        pl_module: L.LightningModule,
         stage: str | None = None,
     ) -> None:
         metrics = {}
