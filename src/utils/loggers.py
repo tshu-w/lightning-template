@@ -1,6 +1,6 @@
 import os
 
-import lightning.pytorch as pl
+import lightning as L
 from lightning.fabric.utilities.types import _PATH
 from lightning.pytorch.callbacks import ModelCheckpoint
 
@@ -19,10 +19,10 @@ def log_dir(self) -> str:
     return dirpath
 
 
-pl.Trainer.log_dir = log_dir
+L.Trainer.log_dir = log_dir
 
 
-def __resolve_ckpt_dir(self, trainer: pl.Trainer) -> _PATH:
+def __resolve_ckpt_dir(self, trainer: L.Trainer) -> _PATH:
     """Determines model checkpoint save directory at runtime. References attributes from the trainer's logger
     to determine where to save checkpoints. The base path for saving weights is set in this priority:
     1.  Checkpoint callback's path (if passed in)
