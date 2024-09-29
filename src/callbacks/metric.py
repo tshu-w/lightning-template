@@ -41,13 +41,11 @@ class Metric(L.Callback):
 
                 val_metrics = {}
                 if trainer.validate_loop._data_source.is_defined():
-                    trainer.callbacks = []
                     trainer.validate(**fn_kwargs)
                     val_metrics = convert_tensors_to_scalars(trainer.logged_metrics)
 
                 test_metrics = {}
                 if trainer.test_loop._data_source.is_defined():
-                    trainer.callbacks = []
                     trainer.test(**fn_kwargs)
                     test_metrics = convert_tensors_to_scalars(trainer.logged_metrics)
 
