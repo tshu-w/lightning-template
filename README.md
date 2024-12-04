@@ -131,7 +131,7 @@ lightning-template
 <h2 id="your-project-name">Your Project Name</h2>
 
 <p>
-<a href="https://arxiv.org/abs/1706.03762"><img src="http://img.shields.io/badge/arxiv-1706.03762-B31B1B.svg?style=flat-square" alt="Arxiv" /></a>
+<a href="https://arxiv.org/abs/1706.03762"><img src="http://img.shields.io/badge/arXiv-1706.03762-B31B1B.svg?style=flat-square" alt="Arxiv" /></a>
 <a href="https://proceedings.neurips.cc/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf"><img src="http://img.shields.io/badge/NeurIPS-2017-4b44ce.svg?style=flat-square" alt="Conference" /></a>
 </p>
 
