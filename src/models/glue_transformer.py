@@ -34,7 +34,7 @@ class GLUETransformer(L.LightningModule):
         )
         self.model = AutoModelForSequenceClassification.from_pretrained(
             model_name_or_path
-        )
+        ).train()
         self.metric = evaluate.load("glue", task_name)
 
         self.validation_step_outputs = []
